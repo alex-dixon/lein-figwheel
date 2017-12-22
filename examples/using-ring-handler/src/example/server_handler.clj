@@ -1,6 +1,7 @@
 (ns example.server-handler
   (:require [compojure.core :refer :all]
             [compojure.route :as route]
+            [tailrecursion.ring-proxy :refer [wrap-proxy]]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [ring.util.response :as response]))
@@ -19,9 +20,13 @@
   ;; NOTE: this will deliver your index.html
   (GET "/" [] (-> (response/resource-response "index.html" {:root "public"})
                   (response/content-type "text/html")))
-  (GET "/hello" [] "Hello World there!")
+  ;(GET "/hello" [] "Hello World there!")
   (route/not-found "Not Found"))
 
 ;; NOTE: wrap reload isn't needed when the clj sources are watched by figwheel
 ;; but it's very good to know about
-(def dev-app (wrap-reload (wrap-defaults #'app-routes site-defaults)))
+(def dev-app
+  (-> #'app-routes
+    (wrap-proxy "/hello" "http://google.com")))
+    ;(wrap-defaults site-defaults)
+    ;(wrap-reload)))

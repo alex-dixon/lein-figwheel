@@ -8,6 +8,7 @@
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.229"]
+                 [tailrecursion/ring-proxy "1.0.0-SNAPSHOT"]
                  [org.clojure/core.async "0.2.395"
                   :exclusions [org.clojure/tools.reader]]
 
